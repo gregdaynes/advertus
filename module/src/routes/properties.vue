@@ -6,15 +6,31 @@
 			</v-list-item>
 			<v-button v-on:click="logToConsole">Log collections to console</v-button>
 		</v-list>
+
+		<template #navigation>
+			<advertus-navigation :path="route.path"/>
+		</template>
 	</private-view>
 </template>
 
 <script>
+import AdvertusNavigation from '../components/navigation.vue'
+import { useRoute } from 'vue-router';
 import { useApi } from '@directus/extensions-sdk'
+import { defineComponent } from 'vue';
+import { useI18n } from 'vue-i18n';
 
-export default {
+export default defineComponent({
+	name: 'Advertus',
+	components: { AdvertusNavigation },
+	inject: ['api'],
+
 	setup() {
 		const api = useApi();
+		const { t } = useI18n();
+		const route = useRoute()
+
+		return { t, route }
 	},
 
 	data() {
@@ -29,7 +45,6 @@ export default {
 		},
 	},
 
-	inject: ['api'],
 
 	mounted() {
 		console.log(this.api)
@@ -38,5 +53,5 @@ export default {
 			this.collections = res.data.data
 		})
 	}
-};
+});
 </script>
